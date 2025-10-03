@@ -1,2 +1,0 @@
-// StorageService
-export default {};

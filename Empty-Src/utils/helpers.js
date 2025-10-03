@@ -1,2 +1,0 @@
-// helpers
-export function noop() {}

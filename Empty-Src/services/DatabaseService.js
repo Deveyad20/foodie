@@ -1,2 +1,0 @@
-// DatabaseService
-export default {};

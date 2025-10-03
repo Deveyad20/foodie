@@ -1,2 +1,0 @@
-// FirebaseService
-export default {};
