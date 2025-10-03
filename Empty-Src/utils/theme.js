@@ -1,0 +1,2 @@
+// theme
+export const theme = {};

@@ -1,0 +1,2 @@
+// DatabaseService
+export default {};
