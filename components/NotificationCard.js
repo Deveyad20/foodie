@@ -84,7 +84,7 @@ const NotificationCard = ({ notification, onPress }) => {
     timestamp: {
       fontSize: theme.typography.caption.fontSize,
       color: theme.colors.disabled,
-      alignSelf: 'flex-flex-start',
+      alignSelf: 'flex-start',
     },
     actionsContainer: {
       flexDirection: 'row',

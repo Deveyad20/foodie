@@ -40,12 +40,6 @@ const AddRecipeScreen = ({ route, navigation }) => {
     })();
   }, []);
 
-  // Debug logging when component mounts
-  React.useEffect(() => {
-    console.log('Component mounted. Initial recipe:', initialRecipe);
-    console.log('Initial categoryId from route:', initialRecipe.categoryId);
-    console.log('Current categoryId state:', categoryId);
-  }, []);
 
   const [name, setName] = useState(initialRecipe.name || '');
   const [description, setDescription] = useState(initialRecipe.description || '');
@@ -53,9 +47,6 @@ const AddRecipeScreen = ({ route, navigation }) => {
   const [video, setVideo] = useState(initialRecipe.video || '');
   const [categoryId, setCategoryId] = useState(initialRecipe.categoryId || '');
   
-  // Debug logging for initial state
-  console.log('Initial categoryId:', initialRecipe.categoryId);
-  console.log('Initial categoryId state:', categoryId);
   
   // Helper function to properly handle image sources
   const getImageSource = (image) => {
@@ -88,10 +79,6 @@ const AddRecipeScreen = ({ route, navigation }) => {
     return require('../assets/images/240_F_232418936.jpg');
   };
   
-  // Debug logging when categoryId changes
-  React.useEffect(() => {
-    console.log('categoryId changed to:', categoryId);
-  }, [categoryId]);
   const [prepTime, setPrepTime] = useState(initialRecipe.prepTime?.toString() || '');
   const [cookTime, setCookTime] = useState(initialRecipe.cookTime?.toString() || '');
   const [servings, setServings] = useState(initialRecipe.servings?.toString() || '4');
@@ -239,7 +226,6 @@ const AddRecipeScreen = ({ route, navigation }) => {
     }
 
     if (!categoryId) {
-      console.log('Category validation failed. Selected categoryId:', categoryId);
       Alert.alert('Error', 'Please select a category');
       return false;
     }
@@ -297,9 +283,7 @@ const AddRecipeScreen = ({ route, navigation }) => {
   };
 
   const handleSave = async () => {
-    console.log('Saving recipe. Current categoryId:', categoryId);
     if (!validateForm()) {
-      console.log('Form validation failed');
       return;
     }
 
@@ -656,7 +640,6 @@ const AddRecipeScreen = ({ route, navigation }) => {
                 categoryId === category.id && styles.selectedCategoryButton,
               ]}
               onPress={() => {
-                console.log('Category selected:', category.name, 'ID:', category.id);
                 setCategoryId(category.id);
               }}
             >

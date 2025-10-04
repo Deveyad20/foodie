@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { Video } from 'expo-video';
+import { Video } from 'expo-av';
 import { useTheme } from '../context/ThemeContext';
 
 const InstructionStep = ({ step, index }) => {

@@ -11,7 +11,7 @@ import {
   Share,
   Alert,
 } from 'react-native';
-import { Video } from 'expo-video';
+import { Video } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useRecipes } from '../context/RecipeContext';

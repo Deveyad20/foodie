@@ -28,28 +28,21 @@ export const RecipeProvider = ({ children }) => {
   const loadRecipes = async () => {
     try {
       setIsLoading(true);
-      console.log('Loading recipes...');
       const loadedRecipes = await getRecipes();
-      console.log(`Found ${loadedRecipes.length} recipes in storage`);
       
       // If no recipes exist, initialize with sample data
       if (loadedRecipes.length === 0) {
-        console.log('No recipes found. Initializing sample data...');
         await refreshSampleData();
         const refreshedRecipes = await getRecipes();
-        console.log(`Initialized with ${refreshedRecipes.length} recipes`);
         setRecipes(refreshedRecipes);
       } else {
-        console.log(`Using existing ${loadedRecipes.length} recipes`);
         setRecipes(loadedRecipes);
       }
     } catch (error) {
       console.error('Error loading recipes:', error);
       // If there's an error, try to refresh the sample data
-      console.log('Error loading recipes, trying to refresh sample data...');
       await refreshSampleData();
       const refreshedRecipes = await getRecipes();
-      console.log(`Initialized with ${refreshedRecipes.length} recipes after error`);
       setRecipes(refreshedRecipes);
     } finally {
       setIsLoading(false);

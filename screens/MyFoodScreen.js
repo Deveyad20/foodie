@@ -20,7 +20,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 const MyFoodScreen = ({ navigation }) => {
   const { theme } = useTheme();
-  const { recipes, isLoading, removeRecipe, loadRecipes, favorites } = useRecipes();
+  const { recipes, isLoading, removeRecipe, loadRecipes, favorites, handleToggleFavorite } = useRecipes();
   const { user } = useAuth();
   const { addNotification } = useNotification();
   const [myRecipes, setMyRecipes] = useState([]);

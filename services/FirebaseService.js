@@ -1,7 +1,7 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import 'firebase/compat/storage';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 // Replace with your Firebase config
 const firebaseConfig = {
@@ -14,18 +14,19 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+const storage = getStorage(app);
 
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-const storage = firebase.storage();
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, doc, setDoc, getDocs, query, orderBy, limit as queryLimit } from 'firebase/firestore';
 
 export const signUp = async (email, password, displayName) => {
   try {
-    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-    await userCredential.user.updateProfile({ displayName });
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(userCredential.user, { displayName });
     return userCredential.user;
   } catch (error) {
     throw error;
@@ -34,7 +35,7 @@ export const signUp = async (email, password, displayName) => {
 
 export const signIn = async (email, password) => {
   try {
-    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential.user;
   } catch (error) {
     throw error;
@@ -43,7 +44,7 @@ export const signIn = async (email, password) => {
 
 export const signOut = async () => {
   try {
-    await auth.signOut();
+    await firebaseSignOut(auth);
   } catch (error) {
     throw error;
   }
@@ -53,9 +54,9 @@ export const uploadImage = async (uri, path) => {
   try {
     const response = await fetch(uri);
     const blob = await response.blob();
-    const ref = storage.ref().child(path);
-    await ref.put(blob);
-    return await ref.getDownloadURL();
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, blob);
+    return await getDownloadURL(storageRef);
   } catch (error) {
     throw error;
   }
@@ -63,11 +64,11 @@ export const uploadImage = async (uri, path) => {
 
 export const saveRecipeToCloud = async (recipe, userId) => {
   try {
-    const recipeRef = firestore.collection('recipes').doc();
-    await recipeRef.set({
+    const recipeRef = doc(collection(firestore, 'recipes'));
+    await setDoc(recipeRef, {
       ...recipe,
       userId,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: new Date(),
     });
     return recipeRef.id;
   } catch (error) {
@@ -77,11 +78,12 @@ export const saveRecipeToCloud = async (recipe, userId) => {
 
 export const getRecipesFromCloud = async (limit = 20) => {
   try {
-    const snapshot = await firestore
-      .collection('recipes')
-      .orderBy('createdAt', 'desc')
-      .limit(limit)
-      .get();
+    const q = query(
+      collection(firestore, 'recipes'),
+      orderBy('createdAt', 'desc'),
+      queryLimit(limit)
+    );
+    const snapshot = await getDocs(q);
     
     return snapshot.docs.map(doc => ({
       id: doc.id,

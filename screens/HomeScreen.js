@@ -92,10 +92,8 @@ const HomeScreen = ({ navigation }) => {
   // Function to handle manual refresh of data
   const handleRefreshData = async () => {
     try {
-      console.log('Manually refreshing sample data...');
       await refreshSampleData();
       await loadRecipes();
-      console.log('Data refreshed successfully');
     } catch (error) {
       console.error('Error refreshing data:', error);
     }
@@ -116,13 +114,13 @@ const HomeScreen = ({ navigation }) => {
     }
     
     if (category.id === 'my-favorites') {
-      // Navigate to Favorites screen
+      // Navigate to Favorites tab
       navigation.navigate('Favorites');
       return;
     }
     
     if (category.id === 'my-food') {
-      // Navigate to My Food screen
+      // Navigate to My Food tab
       setSelectedCategory(null); // Clear any selected category
       navigation.navigate('MyFood');
       return;
